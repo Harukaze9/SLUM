@@ -38,7 +38,7 @@ class ClipBoardManager:
         with open(self.json_data, "w") as f:
             json.dump({}, f)
 
-    def get_iniial_data(self):
+    def get_initial_data(self):
         return {}
 
 
