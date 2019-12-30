@@ -33,6 +33,9 @@ class ClipBoardManager:
     def add_data(self, add_key, add_content):
         dt = datetime.datetime.now()
         self.data[add_key] = {}
+        if not add_content:
+            print("input content of {}".format(add_key))
+            add_content = input()
         self.data[add_key]["content"] = add_content
         self.data[add_key]["timestamp"] = math.floor(dt.timestamp())
         f = open(self.json_data, "w")
@@ -52,21 +55,19 @@ class ClipBoardManager:
     def reset_contents(self):
         with open(self.json_data, "w") as f:
             json.dump(self.get_initial_data(), f)
+        print("Success: cleared")
         self.reload()
 
     def get_initial_data(self):
-        dic = { "example":{
-                    "content": "\"this is an example string\"",
-                    "timestamp": 0
-                    }
-                }
+        dic = {"example":
+                {"content": "\"this is an example string\"",
+                "timestamp": 0} }
         return dic
 
     def reload(self):
         self.data = self.read_data()
         self.df = pd.DataFrame.from_dict(self.data, orient="index")
         self.df.index.name="key"
-
 
     def copy_to_clipboard_by_input(self, target):
         if (len(self.df) == 0):
@@ -85,34 +86,34 @@ class ClipBoardManager:
             key = input()
         content = self.data[key]["content"]
         pyperclip.copy(content)
-        print("Success: copied [{}]".format(content))
+        print("Success: clipboard <== [{}]".format(content))
 
     def delete_item_by_key(self, key):
         if key in self.data:
+            print("\"{} ({})\" is deleted".format(key, self.data[key]["content"]))
             del self.data[key]
             f = open(self.json_data, "w")
             json.dump(self.data, f)
-            print("\"{}\" is deleted".format(key))
         else:
             print("\"{}\" is not found in data".format(key))
             exit()
 
 if __name__ == '__main__':
-    parser = argparse.ArgumentParser(description="nothing")
+    parser = argparse.ArgumentParser(description="nothing....")
     parser.add_argument("--clip", type=str)
     parser.add_argument("-k", "--key", type=str)
     parser.add_argument("-v", "--value", type=str)
-    parser.add_argument("-r", "--read", action="store_true")
+    parser.add_argument("--read", action="store_true")
     parser.add_argument("--clear", action="store_true")
     parser.add_argument("--delete", action="store_true")
-    parser.add_argument("-a", "--add", action="store_true")
+    parser.add_argument("--add", action="store_true")
     args = parser.parse_args()
 
     CBManager = ClipBoardManager()
 
     if args.clip != None:
-        # CBManager.show_contents()
         CBManager.copy_to_clipboard_by_input(args.clip)
+        exit(0)
     
     if args.read:
         CBManager.show_contents()
@@ -123,18 +124,17 @@ if __name__ == '__main__':
         CBManager.reset_contents()
         CBManager.reload()
         CBManager.show_contents()
-        print("Success: cleared")
-        exit()
+        exit(0)
 
     if args.add:
         CBManager.add_data(args.key, args.value)
         CBManager.reload()
         CBManager.show_contents()
-        exit()
+        exit(0)
     
     if args.delete:
         CBManager.delete_item_by_key(args.key)
         CBManager.reload()
         CBManager.show_contents()
-        exit()
+        exit(0)
 
