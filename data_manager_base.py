@@ -21,7 +21,7 @@ class DataManagerBase:
         if not os.path.exists(self.json_data):
             print("{} was not found".format(self.json_data))
             print("Creating {}".format(self.json_data))
-            self._create_initial_data()
+            self._write_initial_data()
 
         with open(self.json_data) as f:
             data = json.load(f)
@@ -54,13 +54,22 @@ class DataManagerBase:
             print(self.df.sort_values("timestamp").head(n=1000))
         print("===============================================")
 
+    def create_backup(self):
+        dt = datetime.datetime.now()
+        timestamp = str(dt.date()) +"-"+ str(dt.hour) +"-"+ str(dt.minute)
+        backup_filename = "content_backup-" + timestamp
+        with open(backup_filename, "w") as f:
+            json.dump(self.data, f)
+
 
     def reset_contents(self):
-        self._create_initial_data()
+        self.create_backup()
+        exit()
+        self._write_initial_data()
         print("Success: cleared")
         self.reload()
 
-    def _create_initial_data(self):
+    def _write_initial_data(self):
         dic = {"example":
                 {"content": "\"this is an example string\"",
                 "timestamp": 0} }

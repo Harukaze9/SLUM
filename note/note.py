@@ -7,7 +7,7 @@ import pandas as pd
 import pyperclip
 import sys
 
-sys.path.append("../")
+sys.path.append(os.path.dirname(__file__)+"/../")
 import data_manager_base
 
 
@@ -38,7 +38,7 @@ class NoteManager(data_manager_base.DataManagerBase):
         columns = ["category", "timestamp", "note_path"]
         self._show_contents(columns)
         
-    def _create_initial_data(self):
+    def _write_initial_data(self):
         example_note_path = os.path.join(self.note_dir, "example.md")
         dic = {"example":
                 {"note_path": example_note_path,
@@ -48,13 +48,9 @@ class NoteManager(data_manager_base.DataManagerBase):
         with open(self.json_data, "w") as f:
             json.dump(dic, f)
         
-        
-
     def delete_item_by_key(self, key):
         note_path = self.data[key]["note_path"]
         super().delete_item_by_key(key, note_path)
-        # os.remove(note_path)
-        # print("{} is removed!".format(note_path))
     
     def reset_contents(self):
         for key in self.data.keys():
@@ -66,7 +62,7 @@ class NoteManager(data_manager_base.DataManagerBase):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description="nothing....")
-    parser.add_argument("--clip", type=str)
+    # parser.add_argument("--clip", type=str)
     parser.add_argument("-k", "--key", type=str)
     parser.add_argument("-c", "--category", type=str)
     parser.add_argument("--read", action="store_true")
@@ -77,13 +73,12 @@ if __name__ == '__main__':
 
     NManager = NoteManager()
 
-    if args.clip != None:
-        NManager.copy_to_clipboard_by_input(args.clip)
-        exit(0)
+    # if args.clip != None:
+    #     NManager.copy_to_clipboard_by_input(args.clip)
+    #     exit(0)
     
     if args.read:
         NManager.show_contents()
-        # NManager.copy_to_clipboard_by_input(args.clip)
         exit(0)
 
     if args.clear:

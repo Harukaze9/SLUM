@@ -38,6 +38,15 @@ class ClipBoardManager(data_manager_base.DataManagerBase):
         pyperclip.copy(content)
         print("Success: clipboard <== [{}]".format(content))
 
+    def add_data(self, add_key, add_content):
+        dt = datetime.datetime.now()
+        dic = {}
+        if not add_content:
+            print("input content of {}".format(add_key))
+            add_content = input()
+        dic["content"] = add_content
+        dic["timestamp"] = math.floor(dt.timestamp())
+        self._add_data(add_key, dic)
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description="nothing....")
