@@ -38,14 +38,17 @@ class NoteManager(data_manager_base.DataManagerBase):
         columns = ["category", "timestamp", "note_path"]
         self._show_contents(columns)
         
-    def _get_initial_data(self):
+    def _create_initial_data(self):
         example_note_path = os.path.join(self.note_dir, "example.md")
         dic = {"example":
                 {"note_path": example_note_path,
                 "timestamp": 0,
                 "category": None,
                 }}
-        return dic
+        with open(self.json_data, "w") as f:
+            json.dump(dic, f)
+        
+        
 
     def delete_item_by_key(self, key):
         note_path = self.data[key]["note_path"]

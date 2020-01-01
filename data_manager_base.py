@@ -21,8 +21,7 @@ class DataManagerBase:
         if not os.path.exists(self.json_data):
             print("{} was not found".format(self.json_data))
             print("Creating {}".format(self.json_data))
-            with open(self.json_data, "w") as f:
-                json.dump(self._get_initial_data(), f)
+            self._create_initial_data()
 
         with open(self.json_data) as f:
             data = json.load(f)
@@ -57,16 +56,16 @@ class DataManagerBase:
 
 
     def reset_contents(self):
-        with open(self.json_data, "w") as f:
-            json.dump(self._get_initial_data(), f)
+        self._create_initial_data()
         print("Success: cleared")
         self.reload()
 
-    def _get_initial_data(self):
+    def _create_initial_data(self):
         dic = {"example":
                 {"content": "\"this is an example string\"",
                 "timestamp": 0} }
-        return dic
+        with open(self.json_data, "w") as f:
+            json.dump(dic, f)
 
     def reload(self):
         self.data = self.read_data()

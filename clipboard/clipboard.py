@@ -7,12 +7,12 @@ import pandas as pd #こいつのimport だけで0.5[s] かかる (これを外�
 import pyperclip
 import sys
 
-sys.path.append("../")
+sys.path.append(os.path.dirname(__file__)+"/../")
 import data_manager_base
 
 
 class ClipBoardManager(data_manager_base.DataManagerBase):
-    main_dir          = os.path.dirname(os.path.abspath(__file__))
+    main_dir          = os.path.dirname(__file__)
     data_dir = main_dir + "/data/"
     json_data = data_dir + 'content.json'
 
