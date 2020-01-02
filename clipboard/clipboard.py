@@ -13,11 +13,10 @@ import data_manager_base
 
 class ClipBoardManager(data_manager_base.DataManagerBase):
     main_dir          = os.path.dirname(__file__)
-    data_dir = main_dir + "/data/"
-    json_data = data_dir + 'content.json'
 
     def __init__(self):
         super().__init__()
+        self.columns_show=["content", "timestamp"]
 
     def copy_to_clipboard_by_input(self, target):
         if (len(self.df) == 0):
@@ -47,6 +46,10 @@ class ClipBoardManager(data_manager_base.DataManagerBase):
         dic["content"] = add_content
         dic["timestamp"] = math.floor(dt.timestamp())
         self._add_data(add_key, dic)
+
+    def delete_item_by_key(self, key, filepath = ""):
+        print("content: {}".format(self.data[key]["content"]))
+        super().delete_item_by_key(key, filepath)
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description="nothing....")
