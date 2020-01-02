@@ -7,7 +7,7 @@ import pandas as pd #こいつのimport だけで0.5[s] かかる (これを外�
 import pyperclip
 import sys
 
-sys.path.append(os.path.dirname(__file__)+"/../")
+sys.path.append("..")
 import data_manager_base
 
 
