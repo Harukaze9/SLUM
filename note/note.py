@@ -7,7 +7,7 @@ import pandas as pd
 import pyperclip
 import sys
 
-sys.path.append("..")
+sys.path.append(os.path.dirname(os.path.abspath(__file__))+"/..")
 import data_manager_base
 
 
