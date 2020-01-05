@@ -9,23 +9,22 @@ import pyperclip
 
 class DataManagerBase:
     main_dir          = os.path.dirname(os.path.abspath(__file__))
+    data_dir = main_dir + "/data/"
+    json_data = data_dir + 'content.json'
     use_category = False
     use_tag = False
+    columns_show = ["timestamp"]
 
     def __init__(self):
-        self.data_dir = self.main_dir + "/data/"
-        self.json_data = self.data_dir + 'content.json'
         self.data = self.read_data()
         self.df = pd.DataFrame.from_dict(self.data, orient="index")
         self.df.index.name="key"
-        self.columns_show = ["timestamp"]
 
     def read_data(self):
         if not os.path.exists(self.json_data):
             print("{} was not found".format(self.json_data))
             print("Creating {}".format(self.json_data))
             self._write_initial_data()
-
         with open(self.json_data) as f:
             data = json.load(f)
             return data

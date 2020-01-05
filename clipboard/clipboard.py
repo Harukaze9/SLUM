@@ -12,7 +12,14 @@ import data_manager_base
 
 
 class ClipBoardManager(data_manager_base.DataManagerBase):
+    # Base
     main_dir          = os.path.dirname(__file__)
+    data_dir = main_dir + "/data/"
+    json_data = data_dir + 'content.json'
+    use_category = False
+    use_tag = False
+    columns_show = ["timestamp"]
+
 
     def __init__(self):
         super().__init__()

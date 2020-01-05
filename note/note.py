@@ -12,14 +12,19 @@ import data_manager_base
 
 
 class NoteManager(data_manager_base.DataManagerBase):
+    # Base
     main_dir          = os.path.dirname(os.path.abspath(__file__))
+    data_dir = main_dir + "/data/"
+    json_data = data_dir + 'content.json'
+    use_category = True
+    use_tag = True
+    columns_show=["category", "tags", "timestamp"]
+    # Note
+    note_dir          = main_dir + "/.notes/"
+
 
     def __init__(self):
         super().__init__()
-        self.note_dir = self.main_dir + "/.notes/"
-        self.use_category = True
-        self.use_tag = True
-        self.columns_show=["category", "tags", "timestamp"]
 
     def add_note(self, key, category, tags=[]):
         note_path = os.path.join(self.note_dir, key + ".md")
@@ -49,6 +54,7 @@ class NoteManager(data_manager_base.DataManagerBase):
                 {"note_path": example_note_path,
                 "timestamp": 0,
                 "category": None,
+                "tags": [],
                 }}
         with open(self.json_data, "w") as f:
             json.dump(dic, f)
