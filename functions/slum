@@ -14,6 +14,7 @@ slum(){
     local slum_main_path=~/code/slum
     local slum_clipboard_path="$slum_main_path/clipboard"
     local slum_note_path="$slum_main_path/note"
+    local slum_goto_path="$slum_main_path/goto"
     #============================ clipboard ================================#
     if [ $1 = "clipboard" ]; then
         shift
@@ -75,6 +76,45 @@ slum(){
             return 1
         fi
     #==================================================================#
+
+
+
+    #============================ goto ================================#
+    elif [ $1 = "goto" ]; then
+        shift
+        if [ -z $1 ]; then
+            echo "Error:" "expected more args..."
+        return 0
+        fi
+        if [ $1 = "get" ]; then
+            if [ -z $2 ]; then
+                python3 "$slum_goto_path/goto.py" "--get" ""
+                return 0
+            else
+                cd $(python3 "$slum_goto_path/goto.py" "--get" $2)
+            fi
+        elif test $1 = "clear"; then
+            python3 "$slum_goto_path/goto.py" "--clear"
+        elif test $1 = "add"; then
+            if [ -z $3 ]; then
+                python3 "$slum_goto_path/goto.py" "--add" "--key" $2 "--value" "$(pwd)/"
+            else
+                value=$3
+                if [[ "${value:(-1)}" != "/" ]]; then
+                    value="${value}/"
+                fi
+                python3 "$slum_goto_path/goto.py" "--add" "--key" $2 "--value" $value
+            fi
+        elif test $1 = "read"; then
+            python3 "$slum_goto_path/goto.py" "--read"
+        elif test $1 = "delete"; then
+            python3 "$slum_goto_path/goto.py" "--delete" "--key" $2
+        else
+            echo "Error:" "\"$1\"" "is an unknown command..."
+            return 1
+        fi
+    #==================================================================#
+
     else
         echo "Error:" $1 "is an unknown command..."
         return 1

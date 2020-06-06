@@ -11,6 +11,8 @@ if args.target == "clipboard":
     target_dir = os.path.join(main_dir, "clipboard")
 elif args.target == "note":
     target_dir = os.path.join(main_dir, "note")
+elif args.target == "goto":
+    target_dir = os.path.join(main_dir, "goto")
 else:
     print("Error: unknown target")
     exit(1)

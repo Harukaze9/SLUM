@@ -8,7 +8,7 @@ import pyperclip
 
 
 class DataManagerBase:
-    main_dir          = os.path.dirname(os.path.abspath(__file__))
+    main_dir          = os.path.dirname(os.path.realpath(__file__))
     data_dir = main_dir + "/data/"
     json_data = data_dir + 'content.json'
     use_category = False

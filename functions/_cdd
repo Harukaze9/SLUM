@@ -1,0 +1,16 @@
+#!/bin/bash
+
+_cdd() {
+  local _slum_main_path=~/code/slum
+  local _slum_clipboard_path="$_slum_main_path/clipboard"
+  local _slum_note_path="$_slum_main_path/note"
+
+  local _suggest_args
+  # 現在位置が何番目の引数に当たるか
+  case $COMP_CWORD in
+  1 )
+    _suggest_args=$(python3 "${_slum_main_path}/peek_data.py" goto)
+  esac
+
+  COMPREPLY=( `compgen -W "$_suggest_args" -- ${COMP_WORDS[COMP_CWORD]}` );
+}

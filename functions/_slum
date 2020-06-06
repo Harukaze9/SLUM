@@ -2,19 +2,20 @@
 
 _slum() {
   local _slum_main_path=~/code/slum
-  local _slum_clipboard_path="$_slum_main_path/clipboard"
-  local _slum_note_path="$_slum_main_path/note"
+  local _slum_goto_path="$_slum_main_path/goto"
 
   local _suggest_args
   # 現在位置が何番目の引数に当たるか
   case $COMP_CWORD in
   1 )
-    _suggest_args="clipboard note";;
+    _suggest_args="clipboard note goto";;
   2 )
     if [ ${COMP_WORDS[1]} = "clipboard" ]; then
     _suggest_args="get add read delete"
     elif [ ${COMP_WORDS[1]} = "note" ]; then
     _suggest_args="get add read delete edit_tags edit_category"
+    elif [ ${COMP_WORDS[1]} = "goto" ]; then
+    _suggest_args="get add read delete"
     else
     _suggest_args="something else for other commands"
     fi;;
@@ -31,6 +32,10 @@ _slum() {
     _suggest_args=$(python3 "${_slum_main_path}/peek_data.py" note)
     elif [ ${COMP_WORDS[1]} = "note" ] && [ ${COMP_WORDS[2]} = "edit_category" ]; then
     _suggest_args=$(python3 "${_slum_main_path}/peek_data.py" note)
+    elif [ ${COMP_WORDS[1]} = "goto" ] && [ ${COMP_WORDS[2]} = "get" ]; then
+    _suggest_args=$(python3 "${_slum_main_path}/peek_data.py" goto)
+    elif [ ${COMP_WORDS[1]} = "goto" ] && [ ${COMP_WORDS[2]} = "delete" ]; then
+    _suggest_args=$(python3 "${_slum_main_path}/peek_data.py" goto)
     else
     return 0
     fi;;
