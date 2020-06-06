@@ -15,6 +15,11 @@ cdd(){
 
 
     #============================ goto ================================#
+    if [ $# -lt 1 ]; then
+        slum goto get "default"
+        return 0
+    fi
+
     if [ $1 = "read" ]; then
         slum goto read
         return
