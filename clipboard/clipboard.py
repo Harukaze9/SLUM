@@ -3,7 +3,6 @@ import argparse
 import json
 import datetime
 import math
-import pandas as pd #こいつのimport だけで0.5[s] かかる (これを外すと実行時間を含めて0.03[s]くらい)
 import pyperclip
 import sys
 

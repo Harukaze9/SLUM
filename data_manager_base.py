@@ -3,7 +3,7 @@ import argparse
 import json
 import datetime
 import math
-import pandas as pd #こいつのimport だけで0.5[s] かかる (これを外すと実行時間を含めて0.03[s]くらい)
+from pandas import DataFrame
 import pyperclip
 
 
@@ -17,7 +17,7 @@ class DataManagerBase:
 
     def __init__(self):
         self.data = self.read_data()
-        self.df = pd.DataFrame.from_dict(self.data, orient="index")
+        self.df = DataFrame.from_dict(self.data, orient="index")
         self.df.index.name="key"
 
     def read_data(self):
@@ -86,7 +86,7 @@ class DataManagerBase:
 
     def reload(self):
         self.data = self.read_data()
-        self.df = pd.DataFrame.from_dict(self.data, orient="index")
+        self.df = DataFrame.from_dict(self.data, orient="index")
         self.df.index.name="key"
 
     def delete_item_by_key(self, key, filepath = ""):

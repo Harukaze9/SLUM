@@ -3,7 +3,6 @@ import argparse
 import json
 import datetime
 import math
-import pandas as pd
 import pyperclip
 import sys
 
