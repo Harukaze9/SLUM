@@ -3,7 +3,6 @@ import argparse
 import json
 import datetime
 import math
-from pandas import DataFrame
 import pyperclip
 
 
@@ -17,8 +16,6 @@ class DataManagerBase:
 
     def __init__(self):
         self.data = self.read_data()
-        self.df = DataFrame.from_dict(self.data, orient="index")
-        self.df.index.name="key"
 
     def read_data(self):
         if not os.path.exists(self.json_data):
@@ -54,13 +51,12 @@ class DataManagerBase:
         self._show_contents(self.columns_show)
 
     def _show_contents(self, columns = []):
-        if (len(self.df) == 0):
+        if len(self.data) == 0:
             self.reset_contents()
         print("=============== Database =====================")
-        if columns:
-            print(self.df.sort_values("timestamp")[columns].head(n=1000))
-        else:
-            print(self.df.sort_values("timestamp").head(n=1000))
+        for k in self.data:
+            print("{}: \t{}".format(k, self.data[k]["content"]))
+            
         print("===============================================")
 
     def create_backup(self):
@@ -86,8 +82,6 @@ class DataManagerBase:
 
     def reload(self):
         self.data = self.read_data()
-        self.df = DataFrame.from_dict(self.data, orient="index")
-        self.df.index.name="key"
 
     def delete_item_by_key(self, key, filepath = ""):
         if key in self.data:

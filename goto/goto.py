@@ -3,7 +3,6 @@ import argparse
 import json
 import datetime
 import math
-import pandas as pd #こいつのimport だけで0.5[s] かかる (これを外すと実行時間を含めて0.03[s]くらい)
 import pyperclip
 import sys
 
@@ -53,9 +52,7 @@ if __name__ == '__main__':
     GTManager = GotoManager()
 
     if args.get != None:
-        print(GTManager.df.loc[args.get]["content"])
-        # print(GTManager.df[args.get]["content"])
-        # GotoManager.copy_to_clipboard_by_input(args.clip)
+        print(GTManager.data[args.get]["content"])
         exit(0)
     
     if args.read:

@@ -25,7 +25,7 @@ class ClipBoardManager(data_manager_base.DataManagerBase):
         self.columns_show=["content", "timestamp"]
 
     def copy_to_clipboard_by_input(self, target):
-        if (len(self.df) == 0):
+        if (len(self.data) == 0):
             print("data is empty")
             return
         if target:
@@ -33,11 +33,11 @@ class ClipBoardManager(data_manager_base.DataManagerBase):
         else:
             self.show_contents()
             print("select a key to copy from", end=": ")
-            print(list(self.df.sort_values("timestamp").index))
+            print(list(self.df.keys()))
             key = input()
         while(key not in self.data):
             print("{} is not found in data. Select from".format(key), end=": ")
-            print(list(self.df.sort_values("timestamp").index))
+            print(list(self.data.keys()))
             key = input()
         content = self.data[key]["content"]
         pyperclip.copy(content)
