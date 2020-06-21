@@ -55,7 +55,10 @@ class DataManagerBase:
             self.reset_contents()
         print("=============== Database =====================")
         for k in self.data:
-            print("{}: \t{}".format(k, self.data[k]["content"]))
+            if "content" in self.data[k].keys():
+                print("{}: \t{}".format(k, self.data[k]["content"]))
+            else:
+                print("{}: \t".format(k), [self.data[k][col] for col in self.columns_show] )
             
         print("===============================================")
 
