@@ -1,0 +1,122 @@
+#!/bin/bash
+
+
+#============= 追加予定の仕様 ================#
+#1. slum note $1 で、$1があれば get, なければ add とする
+#2. slum clip $1 で clipする。 (conflicts)
+#3. slum goto $1 で goto する
+#4. slum clipboard や slum note で read する
+#===========================================#
+
+
+
+jj(){
+    local slum_main_path=~/code/slum
+    local slum_clipboard_path="$slum_main_path/clipboard"
+    local slum_note_path="$slum_main_path/note"
+    local slum_goto_path="$slum_main_path/goto"
+    #============================ clipboard ================================#
+    if [ $1 = "clipboard" ]; then
+        shift
+        if [ -z $1 ]; then
+            echo "Error:" "expected more args..."
+        return 0
+        fi
+        if [ $1 = "get" ]; then
+            if [ -z $2 ]; then
+                python3 "$slum_clipboard_path/clipboard.py" "--clip" ""
+                return 0
+            else
+                python3 "$slum_clipboard_path/clipboard.py" "--clip" $2
+            fi
+        elif test $1 = "clear"; then
+            python3 "$slum_clipboard_path/clipboard.py" "--clear"
+        elif test $1 = "add"; then
+            if [ -z $3 ]; then
+                python3 "$slum_clipboard_path/clipboard.py" "--add" "--key" $2 "--value" ""
+            else
+                python3 "$slum_clipboard_path/clipboard.py" "--add" "--key" $2 "--value" $3
+            fi
+        elif test $1 = "read"; then
+            python3 "$slum_clipboard_path/clipboard.py" "--read"
+        elif test $1 = "delete"; then
+            python3 "$slum_clipboard_path/clipboard.py" "--delete" "--key" $2
+        else
+            echo "Error:" "\"$1\"" "is an unknown command..."
+            return 1
+        fi
+    #==================================================================#
+
+    #============================ note ================================#
+    elif [ $1 = "note" ]; then
+        shift
+        if [ -z $1 ]; then
+            echo "Error:" "expected more args..."
+        return 0
+        fi
+        if test $1 = "clear"; then
+            python3 "$slum_note_path/note.py" "--clear"
+        elif test $1 = "add"; then
+            python3 "$slum_note_path/note.py" "--add" "--key" $2
+            local status_code=$?
+            if [ $status_code -ne 0 ]; then return 0; fi
+            emacs "$slum_note_path/.notes/$2.md"
+        elif test $1 = "read"; then
+            python3 "$slum_note_path/note.py" "--read"
+        elif test $1 = "delete"; then
+            python3 "$slum_note_path/note.py" "--delete" "--key" $2
+        elif test $1 = "get"; then
+            emacs "$slum_note_path/.notes/$2.md"
+        elif test $1 = "edit_tags"; then
+            python3 "$slum_note_path/note.py" "--edit" "--key" $2 "--tags" ${@:3}
+        elif test $1 = "edit_category"; then
+            python3 "$slum_note_path/note.py" "--edit" "--key" $2 "--category" $3
+        else
+            echo "Error:" "\"$1\"" "is an unknown command..."
+            return 1
+        fi
+    #==================================================================#
+
+
+
+    #============================ goto ================================#
+    elif [ $1 = "goto" ]; then
+        shift
+        if [ -z $1 ]; then
+            echo "Error:" "expected more args..."
+        return 0
+        fi
+        if [ $1 = "get" ]; then
+            if [ -z $2 ]; then
+                python3 "$slum_goto_path/goto.py" "--get" ""
+                return 0
+            else
+                cd $(python3 "$slum_goto_path/goto.py" "--get" $2)
+            fi
+        elif test $1 = "clear"; then
+            python3 "$slum_goto_path/goto.py" "--clear"
+        elif test $1 = "add"; then
+            if [ -z $3 ]; then
+                python3 "$slum_goto_path/goto.py" "--add" "--key" $2 "--value" "$(pwd)/"
+            else
+                value=$3
+                if [[ "${value:(-1)}" != "/" ]]; then
+                    value="${value}/"
+                fi
+                python3 "$slum_goto_path/goto.py" "--add" "--key" $2 "--value" $value
+            fi
+        elif test $1 = "read"; then
+            python3 "$slum_goto_path/goto.py" "--read"
+        elif test $1 = "delete"; then
+            python3 "$slum_goto_path/goto.py" "--delete" "--key" $2
+        else
+            echo "Error:" "\"$1\"" "is an unknown command..."
+            return 1
+        fi
+    #==================================================================#
+
+    else
+        echo "Error:" $1 "is an unknown command..."
+        return 1
+    fi
+}
