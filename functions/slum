@@ -20,7 +20,7 @@ slum(){
         shift
         if [ -z $1 ]; then
             echo "Error:" "expected more args..."
-        return 0
+            return 0
         fi
         if [ $1 = "get" ]; then
             if [ -z $2 ]; then
