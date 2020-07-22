@@ -60,13 +60,13 @@ jj(){
             python3 "$slum_note_path/note.py" "--add" "--key" $2
             local status_code=$?
             if [ $status_code -ne 0 ]; then return 0; fi
-            emacs "$slum_note_path/.notes/$2.md"
+            vim "$slum_note_path/.notes/$2.md"
         elif test $1 = "read"; then
             python3 "$slum_note_path/note.py" "--read"
         elif test $1 = "delete"; then
             python3 "$slum_note_path/note.py" "--delete" "--key" $2
         elif test $1 = "get"; then
-            emacs "$slum_note_path/.notes/$2.md"
+            vim "$slum_note_path/.notes/$2.md"
         elif test $1 = "edit_tags"; then
             python3 "$slum_note_path/note.py" "--edit" "--key" $2 "--tags" ${@:3}
         elif test $1 = "edit_category"; then
